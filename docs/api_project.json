@@ -1,0 +1,1 @@
+{  "title": "YCool--API文档",  "url": "localhost:5000",  "name": "YCool_server",  "version": "1.0.0",  "description": "",  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2017-03-15T15:05:29.386Z",    "url": "http://apidocjs.com",    "version": "0.17.5"  }}
