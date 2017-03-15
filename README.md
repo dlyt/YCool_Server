@@ -1,5 +1,9 @@
 #YCool_server
 
+##前端地址
+
+https://github.com/dlyt/YCool.git
+
 ##安装
 ```bash
 git clone https://github.com/dlyt/YCool_Server.git
