@@ -9,7 +9,10 @@ import mount from 'koa-mount'
 import serve from 'koa-static'
 
 import config from '../config'
+import handle from '../src/utils/handle'
 import { errorMiddleware } from '../src/middleware'
+
+global.Handle =  handle
 
 const app = new Koa()
 app.keys = [config.session]

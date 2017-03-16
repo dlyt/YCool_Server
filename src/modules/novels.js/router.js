@@ -5,17 +5,10 @@ export const baseUrl = '/novels'
 
 export default [
   {
-    method: 'POST',
-    route: '/',
-    handlers: [
-      novel.createNovel
-    ]
-  },
-  {
     method: 'GET',
-    route: '/search',
+    route: '/search/zh',
     handlers: [
-      novel.searchNovel
+      novel.searchFromZH
     ]
   },
   {
@@ -23,6 +16,13 @@ export default [
     route: '/search/bqk',
     handlers: [
       novel.searchFromBQK
+    ]
+  },
+  {
+    method: 'POST',
+    route: '/search',
+    handlers: [
+      novel.searchNovel
     ]
   },
   {
@@ -38,13 +38,6 @@ export default [
     route: '/directory/:id',
     handlers: [
       novel.getDirectory
-    ]
-  },
-  {
-    method: 'GET',
-    route: '/search/zh',
-    handlers: [
-      novel.searchFromZH
     ]
   },
 ]
