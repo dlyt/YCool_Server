@@ -38,15 +38,15 @@ Chapter.statics = {
       .populate('novel',['name', 'url'])
       .exec()
   },
-  getContentByNumber: function (num, id) {
+  findByNumber: function (id, num) {
     return this
       .findOne({number: num, novel: id})
       .exec()
   },
-  getDirectory: function (id, order) {
+  getDirectory: function (id, options) {
     return this
-      .find({novel: id}, ['title','number'])
-      .sort({number: order})
+      .find({novel: id}, options.attributes)
+      .sort({number: options.order})
       .limit()
       .exec()
   }

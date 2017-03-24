@@ -26,4 +26,4 @@ npm run docs
 
 ##License
 
-MIT
+仅供学习使用

@@ -5,10 +5,18 @@ export const baseUrl = '/chapters'
 
 export default [
   {
-    method: 'GET',
-    route: '/:id',
+    method: 'POST',
+    route: '/',
     handlers: [
       chapter.getChapterInfo
+    ]
+  },
+  {
+    method: 'GET',
+    route: '/firstRender/:id',
+    handlers: [
+      ensureUser,
+      chapter.getFirstRenderChapter
     ]
   },
   {

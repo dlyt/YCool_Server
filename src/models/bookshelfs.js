@@ -7,6 +7,7 @@ const Bookshelf = new mongoose.Schema({
   user: { type: ObjectId, ref: 'user' },
   novel: { type: ObjectId, ref: 'novel'},
   chapter: { type: ObjectId, ref: 'chapter'},
+  progress: { type: Number, default: 0}
 })
 
 Bookshelf.statics = {

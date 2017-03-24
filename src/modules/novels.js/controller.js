@@ -8,6 +8,61 @@ import cheerio from 'cheerio'
 
 
 /**
+  @api {GET} /novels/directory/:id 获取小说目录
+  @apiDescription order是目录顺序1（升序）-1（降序）
+  @apiVersion 1.0.0
+  @apiName 获取小说目录
+  @apiGroup Novels
+
+  @apiExample Example usage:
+    curl -H "Content-Type: application/json" -X GET http://localhost:5000/novels/directory/58c4cbce9e4dad30f80d34e7?order=1
+
+  @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+      "directory": [
+        {
+          "_id": "58c4cbce9e4dad30f80d34e8",
+          "title": "第一章，缺钱的超级大腿",
+          "number": 0
+        },
+        {
+          "_id": "58c4cbce9e4dad30f80d34e9",
+          "title": "第二章，辍学的念头",
+          "number": 1
+        }
+      ]
+    }
+  @apiError UnprocessableEntity
+
+  @apiErrorExample {json} Error-Response:
+    HTTP/1.1 422 Unprocessable Entity
+      {
+        "status": 422,
+        "error": ""
+      }
+ */
+export async function downloadChapters (ctx) {
+  let results
+  const id = ctx.params.id
+  const options = {
+    attributes: ['title', 'content', 'number'],
+    order: 1
+  }
+  try {
+    results = await Chapter.getDirectory(id, options)
+  } catch (err) {
+    Handle.sendEmail(e.message)
+    ctx.throw(422, err.message)
+  }
+  console.log(results);
+  ctx.body = {
+    results
+  }
+  Handle.count('getDirectory')
+}
+
+/**
   @api {GET} /novels/search/zh 搜索小说名称
   @apiDescription
   @apiVersion 1.0.0
@@ -181,7 +236,6 @@ export async function searchFromBQK (ctx) {
       "error": ""
     }
  */
-
 export async function getNovel (ctx) {
   const user = ctx.state.user
   const { name, url } = ctx.request.body.novel
@@ -308,19 +362,21 @@ export async function getNovel (ctx) {
       }
  */
 export async function getDirectory (ctx) {
+  let results
   const id = ctx.params.id
-  const order = ctx.query.order || 1
+  const options = {
+    attributes: ['title', 'number'],
+    order: ctx.query.order || 1
+  }
   try {
-    var directory = await Chapter.getDirectory(id, order)
-  } catch (err) {
+    results = await Chapter.getDirectory(id, options)
+  } catch (e) {
     Handle.sendEmail(e.message)
-    ctx.throw(422, err.message)
+    ctx.throw(422, e.message)
   }
 
-  const response = directory
-
   ctx.body = {
-    directory: response
+    results
   }
   Handle.count('getDirectory')
 }

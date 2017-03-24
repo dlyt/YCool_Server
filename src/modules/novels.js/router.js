@@ -6,6 +6,13 @@ export const baseUrl = '/novels'
 export default [
   {
     method: 'GET',
+    route: '/:id',
+    handlers: [
+      novel.downloadChapters
+    ]
+  },
+  {
+    method: 'GET',
     route: '/search/zh',
     handlers: [
       novel.searchFromZH
