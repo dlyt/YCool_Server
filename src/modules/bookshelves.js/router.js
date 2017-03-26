@@ -26,5 +26,13 @@ export default [
     handlers: [
       bookshelf.delectNovel
     ]
+  },
+  {
+    method: 'POST',
+    route: '/change',
+    handlers: [
+      ensureUser,
+      bookshelf.changeBookshelf
+    ]
   }
 ]

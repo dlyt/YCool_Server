@@ -17,8 +17,12 @@ Bookshelf.statics = {
       .populate('novel')
       .populate('chapter', ['_id', 'number'])
       .exec()
+  },
+  findByUserAndNovelId: function (options){
+    return this
+      .findOne({user: options.userId, novel: options.novelId})
+      .exec()
   }
-
 }
 
 export default mongoose.model('bookshelf', Bookshelf)

@@ -270,9 +270,9 @@ export async function getNovel (ctx) {
   else {
     try {
       var $ = await Crawler.getHtml(url)
-    } catch (err) {
+    } catch (e) {
       Handle.sendEmail(e.message)
-      ctx.throw(422, err.message)
+      ctx.throw(422, e.message)
     }
 
     let novelInfo = {}
@@ -291,9 +291,9 @@ export async function getNovel (ctx) {
     novel = new Novel(novelInfo)
     try {
       await novel.save()
-    } catch (err) {
+    } catch (e) {
       Handle.sendEmail(e.message)
-      ctx.throw(422, err.message)
+      ctx.throw(422, e.message)
     }
 
     const novelId = novel.id
@@ -303,9 +303,9 @@ export async function getNovel (ctx) {
     try {
       var lastChapter = await Chapter.getLastTitle(novelId)
       var count = await Chapter.getCount(novelId)
-    } catch (err) {
+    } catch (e) {
       Handle.sendEmail(e.message)
-      ctx.throw(422, err.message)
+      ctx.throw(422, e.message)
     }
 
     novel.lastChapterTitle = lastChapter[0].title
@@ -313,9 +313,9 @@ export async function getNovel (ctx) {
 
     try {
       await novel.save()
-    } catch (err) {
+    } catch (e) {
       Handle.sendEmail(e.message)
-      ctx.throw(422, err.message)
+      ctx.throw(422, e.message)
     }
     const response = novel.toJSON()
     response.join = false

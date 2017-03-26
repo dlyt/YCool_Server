@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
 const Novel = new mongoose.Schema({
+  type: { type: String, default: 'Normal' },
   name: { type: String , unique: true},
   url: { type: String },
   author: { type: String },

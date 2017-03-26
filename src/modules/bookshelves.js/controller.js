@@ -154,3 +154,58 @@ export async function delectNovel (ctx) {
   }
   Handle.count('delectNovel')
 }
+
+/**
+  @api {POST} /bookshelfs 记录最后阅读章节
+  @apiPermission User
+  @apiVersion 1.0.0
+  @apiName 记录最后阅读章节
+  @apiGroup Bookshelfs
+
+  @apiExample Example usage:
+    curl -H "Content-Type: application/json" "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4YjhmZDRkODUyYTE1YzliNmYyNjI3MSIsImlhdCI6MTQ4ODU1MTc2N30.IEgYwmgyqOBft9s38ool7cmuC2yIlWYVLf4WQzcbqAI" -X GET localhost:5000/bookshelfs/change
+
+  @apiParam num 小说章节
+  @apiParam x   页数
+
+  @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+
+  @apiErrorExample {json} Error-Response:
+    HTTP/1.1 422 Unprocessable Entity
+      {
+        "status": 422,
+        "error": ""
+      }
+ */
+export async function changeBookshelf (ctx) {
+  let chapter,bookshelf
+  const user = ctx.state.user
+  const novel = ctx.request.body.novel
+  const progress = novel.x / 375
+  const options = {
+    userId: user.id,
+    novelId: novel.id
+  }
+  try {
+    bookshelf = await Bookshelf.findByUserAndNovelId(options)
+    chapter = await Chapter.findByNumber(novel.id, novel.num)
+  } catch (e) {
+    Handle.sendEmail(e.message)
+    ctx.throw(422, e.message)
+  }
+
+  bookshelf.progress = progress
+  bookshelf.chapter = chapter.id
+  try {
+    await bookshelf.save()
+  } catch (e) {
+    Handle.sendEmail(e.message)
+    ctx.throw(422, e.message)
+  }
+  
+  ctx.body = {
+    success: true
+  }
+  Handle.count('changeBookshelf')
+}

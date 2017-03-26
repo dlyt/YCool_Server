@@ -1,11 +1,11 @@
-import Chapter from '../models/chapters'
-
+import http from 'http'
 import Request from 'request'
 import cheerio from 'cheerio'
 import iconv from 'iconv-lite'
+import Chapter from '../models/chapters'
 
 
-export async function getSearchLists(url) {
+export function getSearchLists(url) {
   return new Promise(function(resolve, reject) {
     Request(url, function (err, res, body) {
      if (!err) {
@@ -33,25 +33,6 @@ export async function getSearchLists(url) {
   })
 }
 
-// for (let i = 0; i < times; i++) {
-//   saveChapters(url ,list, i * 100, (i + 1) * 100)
-// }
-// for (let y = times * 100, len = list.length; y < len; y++ ) {
-//   let title = list[y].children[0].data
-//   let href = list[y].attribs.href
-//   let num = href.substring(0,href.length - 5)
-//   let contentUrl = `${url}${href}`
-//   let content = await getContent(contentUrl)
-//
-//   let chapter = new Chapter({
-//     title: title,
-//     number: num,
-//     content: content
-//   })
-//
-//   await chapter.save()
-// }
-
 export async function getNovel($, id) {
   const list = $('#list a')
 
@@ -70,12 +51,6 @@ export async function getNovel($, id) {
     await chapter.save()
   }
 }
-
-// export async function getChapterContent(prefix, postfix) {
-//   let url = `${prefix}${postfix}`
-//   let content = await getContent(url)
-//   console.log(content);
-// }
 
 export function getChapterContent(url) {
   return new Promise(function(resolve, reject) {
@@ -103,6 +78,7 @@ export function getHtml(url) {
        resolve($)
      }
      else {
+       console.log(err);
        reject(err)
      }
    })
@@ -125,14 +101,18 @@ export function getBody(url) {
 
 export function request(url) {
   return new Promise(function(resolve, reject) {
-    Request({url: url}, function (err, res, body) {
-     if (!err) {
-       resolve(body)
-     }
-     else {
-       reject(err)
-     }
-   })
+    http.get(url, function(res) {
+      let body = ''
+
+      res.on('data', function(data) {
+        body += data
+      })
+      res.on('end', function() {
+        resolve(body)
+      })
+    }).on('error', function(e) {
+      reject(e)
+    })
   })
 }
 

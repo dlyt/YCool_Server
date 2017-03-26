@@ -1,11 +1,11 @@
 import Chapter from '../../models/chapters'
 import Novel from '../../models/novels'
 import * as Crawler from '../../utils/crawler'
+import * as UpdateNovel from '../../utils/updateNovel'
 
 
 export async function getChapters (ctx) {
-  const html = await Crawler.getHtml('http://search.zongheng.com/search/mvc/suggest.do?keyword=l%E2%80%86j')
-  console.log(html);
+  UpdateNovel.start()
   ctx.body = {
     success: true
   }

@@ -51,6 +51,7 @@
     "koa-router": "^7.0.1",
     "koa-static": "^2.0.0",
     "mongoose": "^4.4.3",
+    "node-schedule": "^1.2.1",
     "nodemailer": "^3.1.7",
     "nodemailer-smtp-transport": "^2.7.2",
     "nodemailer-wellknown": "^0.2.2",
