@@ -43,9 +43,9 @@ Chapter.statics = {
       .findOne({number: num, novel: id})
       .exec()
   },
-  getDirectory: function (id, options) {
+  getDirectory: function (options) {
     return this
-      .find({novel: id}, options.attributes)
+      .find(options.where, options.attributes)
       .sort({number: options.order})
       .limit()
       .exec()

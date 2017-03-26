@@ -55,7 +55,7 @@ export async function downloadChapters (ctx) {
     Handle.sendEmail(e.message)
     ctx.throw(422, err.message)
   }
-  console.log(results);
+
   ctx.body = {
     results
   }
@@ -365,11 +365,12 @@ export async function getDirectory (ctx) {
   let results
   const id = ctx.params.id
   const options = {
+    where: {novel: id},
     attributes: ['title', 'number'],
     order: ctx.query.order || 1
   }
   try {
-    results = await Chapter.getDirectory(id, options)
+    results = await Chapter.getDirectory(options)
   } catch (e) {
     Handle.sendEmail(e.message)
     ctx.throw(422, e.message)
