@@ -1,7 +1,18 @@
+import Bookshelf from '../models/bookshelfs'
 import Novel from '../models/novels'
 import Chapter from '../models/chapters'
 import Schedule from 'node-schedule'
 import * as Crawler from './crawler'
+
+import nodemailer from  'nodemailer'
+import wellknown from 'nodemailer-wellknown'
+import smtpTransport from 'nodemailer-smtp-transport'
+
+export function start() {
+  Schedule.scheduleJob('30 * * * * *', function () {
+    update()
+  })
+}
 
 async function update() {
   let crawlerList,      //获取所有需要更新提醒的小说
@@ -20,6 +31,7 @@ async function update() {
 
   if (crawlerList) {
     for (let item of crawlerList.values()) {
+      sendRemindEmail(item)
       try {
         $ = await Crawler.getHtml(item.url)
       } catch (e) {
@@ -56,7 +68,6 @@ async function update() {
         Handle.sendEmail(e.message)
       }
     }
-
   }
   else {
     return true
@@ -64,8 +75,45 @@ async function update() {
 }
 
 
-export function start() {
-  Schedule.scheduleJob('30 * * * * *', function () {
-    update()
+async function sendRemindEmail(novel) {
+  let userEmails
+  try {
+    userEmails = await Bookshelf.find({novel: '58d5bea44aedd9c45cfa5968'})
+                                .populate('user', ['email'])
+                                .populate('novel', ['name'])
+                                .exec()
+  } catch (e) {
+    Handle.sendEmail(e.message)
+  }
+
+  userEmails.forEach(function(item) {
+    const email = item.user.email
+    const name = item.novel.name
+    const config = wellknown("QQ")
+    config.auth = {
+      user: '',
+      pass: '',
+    }
+
+    const transporter = nodemailer.createTransport(smtpTransport(config))
+
+    const mailOptions = {
+        from: '',
+        to: email,
+        subject: `${name}更新了，Happy!`,
+        text: '',
+        html: '',
+    }
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+          console.log(error);
+          Handle.sendEmail(error.message)
+        }
+        else {
+          console.log('Message sent: ' + info.response)
+        }
+
+    })
   })
 }
