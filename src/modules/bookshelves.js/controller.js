@@ -203,7 +203,7 @@ export async function changeBookshelf (ctx) {
     Handle.sendEmail(e.message)
     ctx.throw(422, e.message)
   }
-  
+
   ctx.body = {
     success: true
   }

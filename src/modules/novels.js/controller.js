@@ -278,8 +278,8 @@ export async function getNovel (ctx) {
     let novelInfo = {}
     const author = $('#info p')[0].children[0].data
     const updateTime = $('#info p')[2].children[0].data
-    const img = $('#fmimg img')[1].attribs.src
-    novelInfo.name =
+    const img = $('#fmimg img')[0].attribs.src
+
     novelInfo.url = url
     novelInfo.name = $('#info h1')[0].children[0].data
     novelInfo.author = author.substring(27, author.length)

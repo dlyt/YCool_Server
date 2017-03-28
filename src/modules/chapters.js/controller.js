@@ -43,9 +43,10 @@ import * as Crawler from '../../utils/crawler'
  */
 export async function getChapterInfo (ctx) {
   let {novelId, num} = ctx.request.body
-  let detail
+  let detail,novel
   try {
     detail = await Chapter.findByNumber(novelId, num)
+    novel = await Novel.findOne({_id: detail.novel})
   } catch (e) {
     Handle.sendEmail(e.message)
     ctx.throw(422, e.message)
@@ -58,7 +59,7 @@ export async function getChapterInfo (ctx) {
     }
   }
   else {
-    const url = `${detail.novel.url}${detail.postfix}`
+    const url = `${novel.url}${detail.postfix}`
     try {
       const content = await Crawler.getChapterContent(url)
       detail.content = content
@@ -123,27 +124,49 @@ export async function getChapterInfo (ctx) {
       }
  */
 export async function getFirstRenderChapter (ctx) {
-  let bookshelf, chapter, nextChapter
+  let bookshelf, chapter, nextChapter, chapters
   const id = ctx.params.id
   const user = ctx.state.user
   try {
-    bookshelf = await Bookshelf.findOne({user: user._id, novel: id})
+    bookshelf = await Bookshelf.findOne({user: user._id, novel: id}).populate('novel')
+    chapter = await Chapter.findById(bookshelf.chapter)
+    if (bookshelf.novel.countChapter != chapter.number + 1) {
+      nextChapter = await Chapter.findByNumber(bookshelf.novel, chapter.number + 1)
+      if (!nextChapter.content) {
+        const url = `${bookshelf.novel.url}${nextChapter.postfix}`
+        const content = await Crawler.getChapterContent(url)
+        nextChapter.content = content
+        await nextChapter.save()
+      }
+    }
   } catch (e) {
     Handle.sendEmail(e.message)
     ctx.throw(422, e.message)
   }
 
-  try {
-    chapter = await Chapter.findById(bookshelf.chapter)
-    nextChapter = await Chapter.findByNumber(bookshelf.novel, chapter.number + 1)
-  } catch (e) {
-    Handle.sendEmail(e.message)
-    ctx.throw(422, e.message)
+  if (!chapter.content) {
+    const url = `${bookshelf.novel.url}${chapter.postfix}`
+    try {
+      const content = await Crawler.getChapterContent(url)
+      chapter.content = content
+      await chapter.save()
+    } catch (e) {
+      Handle.sendEmail(e.message)
+      ctx.throw(422, e.message)
+    }
+  }
+
+  if (nextChapter) {
+    chapters = [chapter, nextChapter]
+  }
+  else {
+    chapters = [chapter]
   }
 
   const response = {
-    chapters: [chapter, nextChapter],
-    progress: bookshelf.progress
+    chapters: chapters,
+    progress: bookshelf.progress,
+    countChapter: bookshelf.novel.countChapter
   }
 
   ctx.body = {

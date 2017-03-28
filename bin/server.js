@@ -22,7 +22,7 @@ mongoose.connect(config.database)
 
 app.use(convert(logger()))
 app.use(bodyParser())
-app.use(session())
+app.use(convert(session()))
 app.use(errorMiddleware())
 
 app.use(convert(mount('/docs', serve(`${process.cwd()}/docs`))))
