@@ -38,4 +38,10 @@ app.listen(config.port, () => {
   console.log(`Server started on ${config.port}`)
 })
 
+//更新小说爬虫
+const UpdateNovel = require('../src/utils/updateNovel')
+if (app.env === 'production') {
+  UpdateNovel.start()
+}
+
 export default app

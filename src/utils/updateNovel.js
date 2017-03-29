@@ -24,6 +24,7 @@ async function update() {
       title,            //章节名称
       chapter           //章节数据，用于存储
   try {
+    //将需要爬取的小说类型设置成VIP
     crawlerList = await Novel.find({type: 'VIP'})
   } catch (e) {
     Handle.sendEmail(e.message)
@@ -31,7 +32,6 @@ async function update() {
 
   if (crawlerList) {
     for (let item of crawlerList.values()) {
-      sendRemindEmail(item)
       try {
         $ = await Crawler.getHtml(item.url)
       } catch (e) {
@@ -41,6 +41,7 @@ async function update() {
       chapterArr = $('#list dd a')
       length = $('#list dd').length
       count = parseInt(item.countChapter)
+      //如果爬取的章节列表数量不等于数据库中的数量，爬取余下章节
       if (count !== length) {
         for (let i = count; i < length; i++) {
           chapter = new Chapter({
@@ -55,22 +56,18 @@ async function update() {
             Handle.sendEmail(e.message)
           }
         }
-      }
-      else {
-        return true
-      }
-      item.updateTime = $('#info p')[2].children[0].data.substring(5, $('#info p')[2].children[0].data.length)
-      item.countChapter = length
-      item.lastChapterTitle = chapterArr[length - 1].children[0].data
-      try {
-        await item.save()
-      } catch (e) {
-        Handle.sendEmail(e.message)
+        //发送邮件并更新小说信息
+        sendRemindEmail(item)
+        item.updateTime = $('#info p')[2].children[0].data.substring(5, $('#info p')[2].children[0].data.length)
+        item.countChapter = length
+        item.lastChapterTitle = chapterArr[length - 1].children[0].data
+        try {
+          await item.save()
+        } catch (e) {
+          Handle.sendEmail(e.message)
+        }
       }
     }
-  }
-  else {
-    return true
   }
 }
 
@@ -78,7 +75,7 @@ async function update() {
 async function sendRemindEmail(novel) {
   let userEmails
   try {
-    userEmails = await Bookshelf.find({novel: '58d5bea44aedd9c45cfa5968'})
+    userEmails = await Bookshelf.find({novel: novel.id})
                                 .populate('user', ['email'])
                                 .populate('novel', ['name'])
                                 .exec()
