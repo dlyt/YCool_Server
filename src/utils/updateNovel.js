@@ -56,8 +56,6 @@ async function update() {
             Handle.sendEmail(e.message)
           }
         }
-        //发送邮件并更新小说信息
-        sendRemindEmail(item)
         item.updateTime = $('#info p')[2].children[0].data.substring(5, $('#info p')[2].children[0].data.length)
         item.countChapter = length
         item.lastChapterTitle = chapterArr[length - 1].children[0].data
@@ -66,6 +64,8 @@ async function update() {
         } catch (e) {
           Handle.sendEmail(e.message)
         }
+        //发送邮件并更新小说信息
+        sendRemindEmail(item)
       }
     }
   }
