@@ -100,7 +100,7 @@ export async function orderNovel (ctx) {
   const bookshelf = new Bookshelf({
     user: user.id,
     novel: novelId,
-    chapter: chapter[0].id
+    chapter: chapter.id 
   })
 
   try {

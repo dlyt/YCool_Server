@@ -123,7 +123,7 @@ export async function getChapterInfo (ctx) {
         "error": ""
       }
  */
-export async function getFirstRenderChapter (ctx) {
+export async function getFirstRenderChapter(ctx) {
   let bookshelf, chapter, nextChapter, chapters
   const id = ctx.params.id
   const user = ctx.state.user
@@ -140,6 +140,7 @@ export async function getFirstRenderChapter (ctx) {
       }
     }
   } catch (e) {
+    console.log(e)
     Handle.sendEmail(e.message)
     ctx.throw(422, e.message)
   }

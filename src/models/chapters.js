@@ -14,7 +14,7 @@ const Chapter = new mongoose.Schema({
 Chapter.statics = {
   getFirstChapter: function (id){
     return this
-      .find({novel: id},['_id'])
+      .findOne({novel: id},['_id'])
       .sort({number: 1})
       .limit(1)
       .exec()
