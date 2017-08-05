@@ -9,6 +9,7 @@ import app from '../../../bin/server'
 const handle = {}
 
 //统计api访问量
+<<<<<<< HEAD
 // handle.count = async (key) => {
 //   try {
 //     let num = await Redis.get(key)
@@ -18,6 +19,18 @@ const handle = {}
 //     Handle.sendEmail(e.message)
 //   }
 // }
+=======
+handle.count = async (key) => {
+  try {
+    return true
+    // let num = await Redis.get(key)
+    // let newNum = num === 'NaN' ? 0 : parseInt(num) + 1
+    // await Redis.set(key, newNum)
+  } catch (e) {
+    Handle.sendEmail(e.message)
+  }
+}
+>>>>>>> d2d91d53d166dc3e90761cbcfd5ac55ce9af3b83
 
 handle.success = (data = {}) => {
   return {
