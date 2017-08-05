@@ -59,7 +59,6 @@ export async function downloadChapters (ctx) {
   ctx.body = {
     results
   }
-  Handle.count('getDirectory')
 }
 
 /**
@@ -124,7 +123,6 @@ export async function searchFromZH (ctx) {
   ctx.body = {
     response
   }
-  Handle.count('searchFromZH')
 }
 
 /**
@@ -205,7 +203,6 @@ export async function searchFromBQK (ctx) {
   ctx.body = {
     response: arr
   }
-  Handle.count('searchFromBQK')
 }
 
 /**
@@ -261,11 +258,9 @@ export async function getNovel (ctx) {
     else {
       response.join = false
     }
-
     ctx.body = {
       novelInfo: response
     }
-    Handle.count('getNovel')
   }
   else {
     try {
@@ -278,7 +273,7 @@ export async function getNovel (ctx) {
     let novelInfo = {}
     const author = $('#info p')[0].children[0].data
     const updateTime = $('#info p')[2].children[0].data
-    const img = $('#fmimg img')[0].attribs.src
+    const img = $('#fmimg img')[0].attribs['data-cfsrc']
 
     novelInfo.url = url
     novelInfo.name = $('#info h1')[0].children[0].data
@@ -322,7 +317,6 @@ export async function getNovel (ctx) {
     ctx.body = {
       novelInfo: response
     }
-    Handle.count('getNovel')
   }
 }
 
@@ -379,7 +373,6 @@ export async function getDirectory (ctx) {
   ctx.body = {
     results
   }
-  Handle.count('getDirectory')
 }
 
 

@@ -53,7 +53,6 @@ export async function createTourist (ctx) {
   ctx.body = {
     token
   }
-  Handle.count('createTourist')
 }
 
 

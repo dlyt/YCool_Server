@@ -73,7 +73,6 @@ export async function getChapterInfo (ctx) {
   ctx.body = {
     response
   }
-  Handle.count('getChapterInfo')
 }
 
 /**
@@ -173,7 +172,6 @@ export async function getFirstRenderChapter(ctx) {
   ctx.body = {
     response
   }
-  Handle.count('getFirstRenderChapter')
 }
 
 /**
@@ -251,7 +249,6 @@ export async function getNextChapterInfo (ctx) {
   ctx.body = {
     detail: response
   }
-  Handle.count('getNextChapterInfo')
 }
 
 /**
@@ -328,5 +325,4 @@ export async function getLastChapterInfo (ctx) {
   ctx.body = {
     detail: response
   }
-  Handle.count('getLastChapterInfo')
 }

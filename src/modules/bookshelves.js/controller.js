@@ -59,7 +59,6 @@ export async function getBookshelf (ctx) {
   ctx.body = {
     list: list
   }
-  Handle.count('getBookshelf')
 }
 
 /**
@@ -113,7 +112,6 @@ export async function orderNovel (ctx) {
   ctx.body = {
     success: true
   }
-  Handle.count('orderNovel')
 }
 
 /**
@@ -152,7 +150,6 @@ export async function delectNovel (ctx) {
   ctx.body = {
     success: true
   }
-  Handle.count('delectNovel')
 }
 
 /**
@@ -207,5 +204,4 @@ export async function changeBookshelf (ctx) {
   ctx.body = {
     success: true
   }
-  Handle.count('changeBookshelf')
 }
